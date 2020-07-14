@@ -2076,6 +2076,21 @@ class IPv6Address(_BaseV6, _BaseAddress):
             return None
         return IPv4Address((self._ip >> 80) & 0xFFFFFFFF)
 
+    def solicitedMulticastAddress(self):
+        """Returns IPv6Address Object with value of Solicited Multicast Address
+        Unless IPv6Address is multicast then return None
+
+        Returns:
+            An IPv6 Address instance of the solicited multicast address or
+            None if the address is already a IPv6 Multicast address
+        """
+        if self.is_multicast:
+            return None
+        solicitedMulticastPrefix = 'ff02:0000:0000:0000:0000:0001:ff{}'
+        hostBits = self.exploded[-7:]
+        hostSMA = IPv6Address(solicitedMulticastPrefix.format(hostBits))
+        return hostSMA
+
 
 class IPv6Interface(IPv6Address):
 
